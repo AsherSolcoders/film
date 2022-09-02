@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
+use App\Models\Comment;
+use App\Models\Film;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function addComment(CommentRequest $request)
     {
-        return view('home');
+        Comment::create([
+            'film_id' => $request->filmid,
+            'user_id' => Auth::user()->id,
+            'name' => $request->name,
+            'comment' => $request->comment,
+        ]);
+
+        return response()->json(['data'=> 'Comment Added'], 200);
+        
     }
+    
+
 }
