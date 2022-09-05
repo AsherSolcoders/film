@@ -25,7 +25,7 @@ class AdminTest extends TestCase
     {
        $admin = Admin::create([
             'name' => 'Admin',
-            'email' => 'admin2@gmail.com',
+            'email' => 'admin@gmail.com',
             'password' => bcrypt('password')
         ]);
 

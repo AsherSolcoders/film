@@ -42,6 +42,12 @@ class CommentTest extends TestCase
     public function test_post_comments()
     {
         $user =   factory('App\Models\User')->create();
+        $this->post('login',[
+            'email' => $user->email,
+            'password' => 'password'
+        ]);
+        $this->assertAuthenticated();
+
         $country =   Country::create(['name'=>'United States', 'code'=>'usa']);
         $film =   factory('App\Models\Film')->create([
             'user_id' => $user->id,
@@ -51,9 +57,12 @@ class CommentTest extends TestCase
         $comment = [
             'name' => 'Test Comment',
             'comment' => 'Test Comment Description',
+            'filmid' => $film->id,
         ];
-       $this->json('POST','add-comment',$comment);
-        $this->assertEquals(1,Comment::count());
+        $response = $this->json('POST','add-comment',$comment);
+        $response
+       ->assertStatus(200)
+       ->assertExactJson(['data'=>'Comment Added']);
 
     }
 }
